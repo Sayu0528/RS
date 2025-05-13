@@ -1,3 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-# Create your views here.
+
+# RS/views.py
+
+def toppage(request):
+    # トップページを表示
+    return render(request, 'toppage.html')
+
