@@ -19,6 +19,8 @@ from django.urls import path
 from django.urls import path, include
 
 urlpatterns = [
+    # 管理者サイト
     path('admin/', admin.site.urls),
     path('', include('RS.urls')), 
+    path('manager/', include('manager.urls')), 
 ]

@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>出勤者一覧</title>
+    <link rel="stylesheet" href="{% static 'manager/css/style.css' %}">
+</head>
+<body>
+
+    <h1>出勤者一覧（2025年5月第4週）</h1>
+
+    <a href="https://example.com/previous-page" class="back-button">戻る</a>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>時間帯</th>
+                <th>月曜日</th>
+                <th>火曜日</th>
+                <th>水曜日</th>
+                <th>木曜日</th>
+                <th>金曜日</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="time-slot">1限</td>
+                <td><span class="employee-name">佐藤</span></td>
+                <td><span class="employee-name">鈴木</span></td>
+                <td><span class="employee-name">高橋</span></td>
+                <td><span class="employee-name">田中</span></td>
+                <td><span class="employee-name">伊藤</span></td>
+            </tr>
+            <tr>
+                <td class="time-slot">2限</td>
+                <td><span class="employee-name">鈴木</span></td>
+                <td><span class="employee-name">高橋</span></td>
+                <td><span class="employee-name">田中</span></td>
+                <td><span class="employee-name">伊藤</span></td>
+                <td><span class="employee-name">佐藤</span></td>
+            </tr>
+            <tr>
+                <td class="time-slot">3限</td>
+                <td><span class="employee-name">高橋</span></td>
+                <td><span class="employee-name">田中</span></td>
+                <td><span class="employee-name">伊藤</span></td>
+                <td><span class="employee-name">佐藤</span></td>
+                <td><span class="employee-name">鈴木</span></td>
+            </tr>
+            <tr>
+                <td class="time-slot">4限</td>
+                <td><span class="employee-name">田中</span></td>
+                <td><span class="employee-name">伊藤</span></td>
+                <td><span class="employee-name">佐藤</span></td>
+                <td><span class="employee-name">鈴木</span></td>
+                <td><span class="employee-name">高橋</span></td>
+            </tr>
+            <tr>
+                <td class="time-slot">5限</td>
+                <td><span class="employee-name">伊藤</span></td>
+                <td><span class="employee-name">佐藤</span></td>
+                <td><span class="employee-name">鈴木</span></td>
+                <td><span class="employee-name">高橋</span></td>
+                <td><span class="employee-name">田中</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
