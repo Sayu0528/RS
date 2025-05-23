@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+<body>
+  <h2>予約カレンダー</h2>
+<!--日付情報-->
+  <div class="calendar-nav">
+    <a href="?week={{ prev_week }}">＜前の週</a>
+    <span>{{ current_date|date:"Y年n月" }}</span>
+    <a href="?week={{ next_week }}">次の週＞</a>
+  </div>
+
+<table class="reservation-calendar">
+<thead>
+  <tr>
+    <tr>日時\日付</tr>
+    {% for date in week_dates %}
+    <th>{{ date|date:"j" }}<br>({{ date|date:"D" }})</th>
+    {% endfor %}
+  </tr>
+</thead>
+
+<tbody>
+{% for slot in time_slots %}
+      <tr>
+        <th>{{ slot.label }}</th>
+        {% for date in week_dates %}
+        <td>
+          {% if availability|get_item:date|get_item:slot.key %}
+            〇
+          {% else %}
+            ×
+          {% endif %}
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+
+{% endblock %}
