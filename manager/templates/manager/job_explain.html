@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>仕事内容編集</title>
+  <link rel="stylesheet" href="{% static 'manager/css/style.css' %}">
+</head>
+<body>
+
+  <main>
+    <section>
+      <h2>仕事内容の説明文</h2>
+      <!--ここに戻る先のURLを書き込め-->
+      <a href="https://example.com/previous-page" class="back-button">戻る</a>
+      <form id="job-description-form">
+        <label for="job-title">仕事のタイトル</label>
+        <input type="text" id="job-title" name="job-title" placeholder="例：食器洗浄" required>
+
+        <label for="job-description">仕事内容の詳細</label>
+        <textarea id="job-description" name="job-description" rows="4" placeholder="仕事内容の詳細を入力してください" required></textarea>
+
+        <button type="submit">保存</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById('job-description-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      alert('仕事内容が保存されました');
+    });
+  </script>
+</body>
+</html>
