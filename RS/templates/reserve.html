@@ -1,4 +1,14 @@
-{% extends 'base.html' %}
-{% block content %}
-
-{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>フォーム入力</title>
+</head>
+<body>
+  <h2>学生情報を入力してください</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">送信</button>
+  </form>
+</body>
+</html>

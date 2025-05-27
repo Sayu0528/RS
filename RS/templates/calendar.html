@@ -1,41 +1,85 @@
-{% extends 'base.html' %}
-
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>予約カレンダー</title>
+  <style>
+    body { font-family: sans-serif; padding: 1em; }
+    .calendar-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1em;
+    }
+    .calendar-nav a {
+      text-decoration: none;
+      padding: .5em 1em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #f5f5f5;
+    }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; text-align: center; padding: .5em; }
+    thead th { background: #f5f5f5; }
+    tbody th { background: #fafafa; }
+  </style>
+</head>
 <body>
-  <h2>予約カレンダー</h2>
-<!--日付情報-->
+
+  <h1>予約カレンダー</h1>
+
+  <!-- ── 週切り替えナビゲーション ── -->
   <div class="calendar-nav">
-    <a href="?week={{ prev_week }}">＜前の週</a>
-    <span>{{ current_date|date:"Y年n月" }}</span>
-    <a href="?week={{ next_week }}">次の週＞</a>
+    <a href="?week={{ prev_week }}">＜ 前の週</a>
+    <span>{{ week_dates.0|date:"Y年n月j日" }} ～ {{ week_dates.6|date:"j日" }}</span>
+    <a href="?week={{ next_week }}">次の週 ＞</a>
   </div>
 
-<table class="reservation-calendar">
-<thead>
-  <tr>
-    <tr>日時\日付</tr>
-    {% for date in week_dates %}
-    <th>{{ date|date:"j" }}<br>({{ date|date:"D" }})</th>
-    {% endfor %}
-  </tr>
-</thead>
-
-<tbody>
-{% for slot in time_slots %}
+  <!-- ── カレンダー本体 ── -->
+  <table>
+    <thead>
       <tr>
-        <th>{{ slot.label }}</th>
-        {% for date in week_dates %}
-        <td>
-          {% if availability|get_item:date|get_item:slot.key %}
-            〇
-          {% else %}
-            ×
-          {% endif %}
-        </td>
+        <th>時間帯＼日付</th>
+        {% for d in week_dates %}
+          <th>
+            {{ d|date:"j" }}<br>
+            {{ d|date:"D" }}
+          </th>
         {% endfor %}
       </tr>
-      {% endfor %}
+    </thead>
+    <tbody>
+      <!-- static rows のまま -->
+      <tr><th>8:00〜9:00</th>
+        {% for d in week_dates %}<td>
+          {% if d|date:"D" == "水" %}
+            <a href="{% url 'form' %}">〇</a>
+          {% endif %}
+        </td>{% endfor %}
+      </tr>
+      <tr><th>9:00〜10:30</th>
+        {% for d in week_dates %}<td></td>{% endfor %}
+      </tr>
+      <tr><th>10:40〜12:10</th>
+        {% for d in week_dates %}<td></td>{% endfor %}
+      </tr>
+      <tr><th>12:10〜13:00</th>
+        {% for d in week_dates %}<td></td>{% endfor %}
+      </tr>
+      <tr><th>13:00〜14:30</th>
+        {% for d in week_dates %}<td></td>{% endfor %}
+      </tr>
+      <tr><th>14:45〜16:15</th>
+        {% for d in week_dates %}<td></td>{% endfor %}
+      </tr>
+      <tr><th>16:30〜18:00</th>
+        {% for d in week_dates %}<td></td>{% endfor %}
+      </tr>
+      <tr><th>18:15〜19:45</th>
+        {% for d in week_dates %}<td></td>{% endfor %}
+      </tr>
     </tbody>
   </table>
-</body>
 
-{% endblock %}
+</body>
+</html>
