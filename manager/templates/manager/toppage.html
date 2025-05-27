@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block head_extra %}
-<link href="{% static 'manager\static\manager\css\toppage.css' %}" rel="stylesheet">
+<link href="{% static 'manager/static/manager/css/toppage.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -17,7 +17,7 @@
   <!-- Main actions -->
   <div class="icon-group">
     <a href="{% url 'manager:shift_input' %}" class="icon shift-icon">
-      <img src="{% static 'manager/images/shift_icon.png' %}" alt="シフト入力">
+      <img src="{% static 'manager/static/manager/img/shift.png' %}" alt="シフト入力">
       <span>シフト入力</span>
     </a>
     <a href="{% url 'manager:attendance_list' %}" class="icon attendance-icon">
