@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head_extra %}
+<link href="{% static 'manager\static\manager\css\toppage.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="top-container">
+  <!-- Top icon -->
+  <div class="icon top-icon">
+    <a href="#">
+      <img src="{% static 'manager/images/top_icon.png' %}" alt="Top">
+    </a>
+  </div>
+
+  <!-- Main actions -->
+  <div class="icon-group">
+    <a href="{% url 'manager:shift_input' %}" class="icon shift-icon">
+      <img src="{% static 'manager/images/shift_icon.png' %}" alt="シフト入力">
+      <span>シフト入力</span>
+    </a>
+    <a href="{% url 'manager:attendance_list' %}" class="icon attendance-icon">
+      <img src="{% static 'manager/images/attendance_icon.png' %}" alt="出席者名簿">
+      <span>出席者名簿</span>
+    </a>
+    <a href="{% url 'manager:job_entry' %}" class="icon job-icon">
+      <img src="{% static 'manager/images/job_icon.png' %}" alt="仕事内容入力">
+      <span>仕事内容入力</span>
+    </a>
+  </div>
+</div>
+{% endblock %}
+

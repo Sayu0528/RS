@@ -1,0 +1,43 @@
+.top-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.top-icon img {
+  width: 120px;
+  height: 120px;
+}
+
+.icon-group {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  max-width: 640px;
+  margin-top: 50px;
+}
+
+.icon-group .icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.2s ease;
+}
+
+.icon-group .icon:hover {
+  transform: translateY(-5px);
+}
+
+.icon-group .icon img {
+  width: 100px;
+  height: 100px;
+}
+
+.icon-group .icon span {
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: bold;
+}
