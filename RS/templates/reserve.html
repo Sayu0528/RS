@@ -1,8 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>フォーム入力</title>
-</head>
+{% extends 'base.html' %}
+{% block title %}{{ date }}ォーム入力{% endblock %}
+{% block content %}
+
+
 <body>
   <h2>学生情報を入力してください</h2>
   <form method="post">
@@ -10,5 +10,5 @@
     {{ form.as_p }}
     <button type="submit">送信</button>
   </form>
-</body>
-</html>
+
+{% endblock %}

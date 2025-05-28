@@ -1,0 +1,38 @@
+body {
+  font-family: sans-serif;
+  padding: 1em;
+  background: #fafafa;
+}
+header {
+  background: #333;
+  color: #fff;
+  padding: .5em;
+}
+header nav a {
+  color: #ffd;
+  margin-right: 1em;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
+}
+th, td {
+  border: 1px solid #ccc;
+  text-align: center;
+  padding: .5em;
+}
+th {
+  background: #eee;
+}
+a {
+  text-decoration: none;
+  color: #007bff;
+}
+a:hover {
+  text-decoration: underline;
+}
+button {
+  margin-top: 1em;
+  padding: .5em 1em;
+}

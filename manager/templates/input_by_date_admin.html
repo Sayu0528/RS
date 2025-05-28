@@ -1,0 +1,28 @@
+{% extends 'shift_admin.html' %}
+{% block title %}{{ date }} の必要人数設定{% endblock %}
+{% block content %}
+  <h2>{{ date }} の必要人数設定</h2>
+  <form method="post">
+    {% csrf_token %}
+    <table>
+      <tr>
+        <th>時間帯</th>
+        <th>必要人数</th>
+      </tr>
+      {% for slot in time_slots %}
+      <tr>
+        <td>{{ slot }}</td>
+        <td>
+          <input
+            type="number"
+            name="slot_{{ forloop.counter0 }}"
+            min="0"
+            placeholder="人数を入力"
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <button type="submit">仮保存</button>
+  </form>
+{% endblock %}
