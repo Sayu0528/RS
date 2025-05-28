@@ -12,3 +12,12 @@ def shift_schedule(request):
 def job_explain(request):
     return render(request, 'manager/job_explain.html')
 
+#toppage
+def toppage(request):
+    return render(request, 'manager/toppage.html')
+
+def attendance_list(request):
+    """
+    出席者名簿ページ
+    """
+    return render(request, 'manager/attendance_list.html')

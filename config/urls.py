@@ -17,10 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import path, include
+from manager import views as m_views
 
 urlpatterns = [
     # 管理者サイト
     path('admin/', admin.site.urls),
     path('', include('RS.urls')), 
     path('manager/', include('manager.urls')), 
+    path('manager/', include('manager.urls')),
+    path('', include(('manager.urls', 'manager'), namespace='manager')),
 ]
