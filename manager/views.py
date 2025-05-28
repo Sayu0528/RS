@@ -24,7 +24,7 @@ def calendar_admin_view(request):
         "16:30〜18:00", "18:15〜19:45"
     ]
 
-    return render(request, 'calendar_admin.html', {
+    return render(request, 'manager/calendar_admin.html', {
         'week_dates': week_dates,
         'time_slots': time_slots,
     })
@@ -36,7 +36,7 @@ def input_by_date_admin_view(request, date):
         "12:10〜13:00", "13:00〜14:30", "14:45〜16:15",
         "16:30〜18:00", "18:15〜19:45"
     ]
-    return render(request, 'input_by_date_admin.html', {
+    return render(request, 'manager/input_by_date_admin.html', {
         'date': date,
         'time_slots': time_slots,
     })

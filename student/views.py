@@ -31,11 +31,11 @@ def calendar_view(request):
     prev_week = (start - timedelta(days=7)).isoformat()
     next_week = (start + timedelta(days=7)).isoformat()
 
-    return render(request, 'calendar.html', {
+    return render(request, 'student/calendar.html', {
         'week_dates': week_dates,
         'prev_week':  prev_week,
         'next_week':  next_week,
     })
 def form_view(request):
     form = StudentForm()
-    return render(request, 'reserve.html', {'form': form})
+    return render(request, 'student/reserve.html', {'form': form})
