@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}
+        <!-- タイトルがここに挿入される -->
+        {% endblock %}</title>
+        <link rel="stylesheet" href="{% static 'css/cu.css' %}">
+</head>
+<body>
+    <header>
+      <h1>東洋大学朝霞キャンパス食堂バイト</h1>
+    </header>
+
+    <main>
+        <!-- 各ページ固有のコンテンツはここに挿入されます -->
+        {% block content %}
+        <!-- コンテンツがここに挿入される -->
+        {% endblock %}
+    </main>
+
+    <!--
+    <footer>
+        <p>テスト２</p>
+    </footer>
+-->
+</body>
+</html>

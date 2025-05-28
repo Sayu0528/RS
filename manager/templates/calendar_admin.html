@@ -1,0 +1,27 @@
+{% extends 'shift_admin.html' %}
+{% block title %}予約カレンダー{% endblock %}
+{% block content %}
+  <h2>予約カレンダー</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>時間＼日付</th>
+        {% for d in week_dates %}
+          <th>{{ d|date:"n/j" }}<br>{{ d|date:"D" }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for slot in time_slots %}
+      <tr>
+        <th>{{ slot }}</th>
+        {% for d in week_dates %}
+          <td>
+            <a href="{% url 'admin_input_by_date' date=d|date:'Y-m-d' %}">設定</a>
+          </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
