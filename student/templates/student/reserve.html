@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'student/calendar_base.html' %}
 {% block title %}{{ date }}ォーム入力{% endblock %}
 {% block content %}
 
@@ -8,7 +8,8 @@
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">送信</button>
+    <button type="submit">予約</button>
   </form>
 
+  <a href="{% url 'calendar' %}">戻る</a>
 {% endblock %}

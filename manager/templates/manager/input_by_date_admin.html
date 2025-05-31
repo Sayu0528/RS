@@ -1,5 +1,9 @@
-{% extends 'shift_admin.html' %}
+{# manager/input_by_date_admin.html #}
+{% extends 'manager/shift_admin.html' %}
+{% load lookup %}   {# ← ここで lookup フィルタを読み込む #}
+
 {% block title %}{{ date }} の必要人数設定{% endblock %}
+
 {% block content %}
   <h2>{{ date }} の必要人数設定</h2>
   <form method="post">
@@ -13,16 +17,18 @@
       <tr>
         <td>{{ slot }}</td>
         <td>
+          
           <input
             type="number"
             name="slot_{{ forloop.counter0 }}"
             min="0"
-            placeholder="人数を入力"
+            value="{{ existing|lookup:slot|default_if_none:'' }}"
           >
         </td>
       </tr>
       {% endfor %}
     </table>
-    <button type="submit">仮保存</button>
+    <button type="submit">保存</button>
+    
   </form>
 {% endblock %}
