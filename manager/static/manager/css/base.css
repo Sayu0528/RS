@@ -1,0 +1,99 @@
+/* ────── base.css ────── */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+/* ヘッダー */
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;            /* ヘッダーの高さを 60px と仮定 */
+    background-color: #2c3e50;
+    color: white;
+    padding: 0 20px;         /* 上下は flex で中央揃えするので 0、左右に余白 */
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;     /* 文字を縦中央揃え */
+    z-index: 1000;
+}
+
+.topbar a {
+    color: white;
+    text-decoration: none;
+}
+
+/* サイドバー */
+.sidebar {
+    position: fixed;
+    top: 60px;               /* ヘッダーの下から始める */
+    left: 0;
+    bottom: 0;
+    width: 200px;
+    background-color: #254463;
+    color: white;
+    padding: 20px;
+    overflow-y: auto;
+}
+.sidebar {
+    position: fixed;
+    top: 60px;        /* ヘッダーの下にピタリ と配置 */
+    left: 0;
+    width: 200px;     /* サイドバーの幅 */
+    bottom: 0;        /* 画面最下部まで伸ばす */
+    background-color: #2c3e50;
+    color: white;
+    padding: 30px;
+    overflow-y: auto; /* 内容が長くなるとサイドバー内でスクロール */
+}
+
+.sidebar h2 {
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 20px;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 5px 0;
+    font-size: 30px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #34495e;
+    padding-left: 10px;
+    font-size: 30px;
+}
+
+.sidebar-footer {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+}
+
+/* ─────────── メインコンテンツ ─────────── */
+.main-content {
+    margin-left: 240px; /* サイドバーの幅分だけ右にずらす */
+    /* 下記 height と overflow で、コンテンツ部分内部でスクロールさせる */
+    height: calc(100vh - 60px); /* 画面全体高さからヘッダー高さを引く */
+    overflow-y: auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    width: calc(100% - 240px); /* サイドバー幅を引いた残り */
+}
