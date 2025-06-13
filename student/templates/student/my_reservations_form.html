@@ -1,0 +1,24 @@
+{% extends "student/calendar_base.html" %}
+
+{% block content %}
+  <h2 class="mb-4">マイ予約確認（学生用）</h2>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" action="{% url 'student:my_reservations' %}">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="student_name" class="form-label">お名前</label>
+      <input type="text"
+             id="student_name"
+             name="student_name"
+             class="form-control"
+             placeholder="例：山田 太郎"
+             required>
+    </div>
+    <button type="submit" class="btn btn-primary">予約を確認する</button>
+    <a href="{% url 'student:calendar' %}" class="btn btn-secondary ms-2">カレンダーに戻る</a>
+  </form>
+{% endblock %}

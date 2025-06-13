@@ -1,73 +1,48 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>出勤者一覧</title>
-    <link rel="stylesheet" href="{% static 'manager/css/style.css' %}">
-</head>
-<body>
+{% extends "manager/index.html" %}
+{% load util_tags %}
 
-    <h1>出勤者一覧（2025年5月第4週）</h1>
-<!--ここに戻る先のURLを書き込め-->
-    <a href="https://example.com/previous-page" class="back-button">戻る</a>
+{% block content %}
+<h2 class="mb-4">今週のシフト表</h2>
 
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>時間帯</th>
+      {% for d in week_dates %}
+        <th class="text-center">
+          {{ d|date:"m/d" }}<br>
+          ({{ d|date:"D" }})
+        </th>
+      {% endfor %}
+    </tr>
+  </thead>
 
-    <table>
-        <thead>
-            <tr>
-                <th>時間帯</th>
-                <th>月曜日</th>
-                <th>火曜日</th>
-                <th>水曜日</th>
-                <th>木曜日</th>
-                <th>金曜日</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="time-slot">1限</td>
-                <td><span class="employee-name">佐藤</span></td>
-                <td><span class="employee-name">鈴木</span></td>
-                <td><span class="employee-name">高橋</span></td>
-                <td><span class="employee-name">田中</span></td>
-                <td><span class="employee-name">伊藤</span></td>
-            </tr>
-            <tr>
-                <td class="time-slot">2限</td>
-                <td><span class="employee-name">鈴木</span></td>
-                <td><span class="employee-name">高橋</span></td>
-                <td><span class="employee-name">田中</span></td>
-                <td><span class="employee-name">伊藤</span></td>
-                <td><span class="employee-name">佐藤</span></td>
-            </tr>
-            <tr>
-                <td class="time-slot">3限</td>
-                <td><span class="employee-name">高橋</span></td>
-                <td><span class="employee-name">田中</span></td>
-                <td><span class="employee-name">伊藤</span></td>
-                <td><span class="employee-name">佐藤</span></td>
-                <td><span class="employee-name">鈴木</span></td>
-            </tr>
-            <tr>
-                <td class="time-slot">4限</td>
-                <td><span class="employee-name">田中</span></td>
-                <td><span class="employee-name">伊藤</span></td>
-                <td><span class="employee-name">佐藤</span></td>
-                <td><span class="employee-name">鈴木</span></td>
-                <td><span class="employee-name">高橋</span></td>
-            </tr>
-            <tr>
-                <td class="time-slot">5限</td>
-                <td><span class="employee-name">伊藤</span></td>
-                <td><span class="employee-name">佐藤</span></td>
-                <td><span class="employee-name">鈴木</span></td>
-                <td><span class="employee-name">高橋</span></td>
-                <td><span class="employee-name">田中</span></td>
-            </tr>
-        </tbody>
-    </table>
+  <tbody>
+    {% for slot in time_slots %}
+      <tr>
+        <td><strong>{{ slot }}</strong></td>
 
-</body>
-</html>
+        {% for d in week_dates %}
+          {% with cell=matrix|default_if_none:""|get_item:slot|get_item:d %}
+            <td>
+              {% if cell %}
+                <div><small>定員 {{ cell.capacity }} / 残 {{ cell.remaining }}</small></div>
+                <ul class="mb-0 ps-3">
+                  {% for r in cell.reservations.all %}
+                    <li>{{ r.student_name }}</li>
+                  {% empty %}
+                    <li class="text-muted">—</li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <span class="text-muted">—</span>
+              {% endif %}
+            </td>
+          {% endwith %}
+        {% endfor %}
+
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

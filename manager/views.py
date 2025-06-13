@@ -1,12 +1,14 @@
 # manager/views.py
 
-from django.shortcuts import render, redirect   # ← redirect を追加
-import datetime                                 # ← datetime を追加
-from manager.models import ShiftSlot            # ← ShiftSlot モデルをインポート
-# ※ TIME_SLOTS はモデル側に置いた場合はインポート可能
-#    ここではビューで直接定義します。
+from django.shortcuts import render, redirect
+from django.utils import timezone
+import datetime
+from datetime import timedelta
+from collections import defaultdict
 
-# 1週間で共通に使う時間帯リストを定数化
+from manager.models import ShiftSlot
+
+# ── 定数：週共通の時間帯リスト ──
 TIME_SLOTS = [
     "8:00〜9:00",
     "9:00〜10:30",
@@ -18,74 +20,114 @@ TIME_SLOTS = [
     "18:15〜19:45",
 ]
 
+
 def index(request):
-    return render(request, 'manager/index.html')
+    return render(request, "manager/index.html")
 
-# 出勤者一覧画面
+
 def shift_schedule(request):
-    return render(request, 'manager/shift_schedule.html')
+    """
+    管理者向けの「今週のシフト表」画面。
+    ここでは予約者の氏名を一週間分まとめて表示します。
+    """
+    today = timezone.localdate()
+    start = today - timedelta(days=today.weekday())
+    week_dates = [start + timedelta(days=i) for i in range(7)]
 
-# 仕事内容入力画面
-def job_explain(request):
-    return render(request, 'manager/job_explain.html')
-
-def calendar_admin_view(request):
-    # 今日の日付から今週（月曜開始の日付リスト）を計算
-    today = datetime.date.today()
-    start = today - datetime.timedelta(days=today.weekday())
-    week_dates = [start + datetime.timedelta(days=i) for i in range(7)]
-
-    # 今週の予約枠をすべて取得（空き状況に関係なく）
-    slots = ShiftSlot.objects.filter(
-        date__range=(week_dates[0], week_dates[-1])
+    slots = (
+        ShiftSlot.objects
+        .filter(date__range=(week_dates[0], week_dates[-1]))
+        .prefetch_related("reservations")
+        .order_by("date", "time_slot")
     )
-    # (date, time_slot) のタプルをキーにして ShiftSlot を辞書化
-    slot_map = {(s.date, s.time_slot): s for s in slots}
 
-    return render(request, "manager/calendar_admin.html", {
+    matrix = defaultdict(dict)
+    for s in slots:
+        matrix[s.time_slot][s.date] = s
+
+    context = {
         "week_dates": week_dates,
         "time_slots": TIME_SLOTS,
-        "slot_map": slot_map,
-    })
+        "matrix": matrix,
+    }
+    return render(request, "manager/shift_schedule.html", context)
 
-# ── 管理者用 日付別入力画面 ──
+
+def job_explain(request):
+    """
+    仕事内容入力画面。
+    """
+    return render(request, "manager/job_explain.html")
+
+
 def input_by_date_admin_view(request, date):
-    # URL パラメータ date は文字列 "YYYY-MM-DD" なので日付型に変換
-    target_date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+    """
+    管理者用・日付別の「必要人数入力」画面と保存処理。
+    URL 側で '<date>' を渡す（例: /manager/2025-06-05/）。
+    """
+    # URL から受け取った 'date' は文字列 "YYYY-MM-DD" のはずなので、
+    # datetime.date 型に変換してあげる。
+    try:
+        target_date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+    except ValueError:
+        # もし 'date' が "2025-06-35" のように不正な文字列なら
+        # 404 やリダイレクトを返してもよいですが、ここでは一旦トップに戻します。
+        return redirect("calendar_admin")
 
     if request.method == "POST":
-        # フォーム送信時：各時間帯の必要人数を保存／更新
+        # フォーム送信時：各時間帯の capacity を更新 or 新規作成
         for idx, slot in enumerate(TIME_SLOTS):
             key = f"slot_{idx}"
             num = request.POST.get(key)
-            # 空欄のままならスキップ
-            if num is None or num == "":
+            if num in (None, ""):
                 continue
-
             capacity = int(num)
-            # 既存なら取得、新規なら作成（capacity は defaults でセット）
-            shift, created = ShiftSlot.objects.get_or_create(
+
+            shift_obj, created = ShiftSlot.objects.get_or_create(
                 date=target_date,
                 time_slot=slot,
                 defaults={"capacity": capacity}
             )
-            # 既存レコードなら capacity を更新
             if not created:
-                shift.capacity = capacity
-                shift.update_availability()  # 残枠に合わせて is_available を更新
-                shift.save()
+                shift_obj.capacity = capacity
+                shift_obj.update_availability()
+                shift_obj.save()
 
-        # 保存後は管理者カレンダーページにリダイレクト
-        return redirect("admin_calendar")
+        return redirect("calendar_admin")
 
-    # GET 時：初期表示として、既存の各枠の capacity を辞書にして渡す
+    # GET 時：既存データを取得して「フォーム初期値」として渡す
     existing = {
         s.time_slot: s.capacity
         for s in ShiftSlot.objects.filter(date=target_date)
     }
 
-    return render(request, "manager/input_by_date_admin.html", {
-        "date": date,
+    context = {
+        "date": date,               # 表示用に文字列のまま渡す
         "time_slots": TIME_SLOTS,
         "existing": existing,
-    })
+    }
+    return render(request, "manager/input_by_date_admin.html", context)
+
+
+def calendar_admin_view(request):
+    """
+    管理者向けの「カレンダー（日付別入力画面）」。
+    '?week=0'（今週）、'?week=1'（来週）を切り替えられる例。
+    """
+    week_offset = int(request.GET.get("week", 0))
+    today = timezone.localdate()
+    base_date = today + timedelta(weeks=week_offset)
+    start = base_date - timedelta(days=base_date.weekday())
+    week_dates = [start + timedelta(days=i) for i in range(7)]
+
+    slots = ShiftSlot.objects.filter(date__range=(week_dates[0], week_dates[-1]))
+    slot_map = {(s.date, s.time_slot): s for s in slots}
+
+    context = {
+        "week_dates": week_dates,
+        "time_slots": TIME_SLOTS,
+        "slot_map": slot_map,
+        "prev_week": week_offset - 1,
+        "next_week": week_offset + 1,
+    }
+    return render(request, "manager/calendar_admin.html", context)

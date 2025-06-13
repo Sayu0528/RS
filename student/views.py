@@ -5,6 +5,10 @@ from django.views import View
 from .forms import StudentForm
 from .models import Reservation
 from manager.models import ShiftSlot
+from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_POST
+from django.urls import reverse
+
 # Create your views here.
 TIME_SLOTS = [
     "8:00〜9:00", "9:00〜10:30", "10:40〜12:10",
@@ -74,3 +78,55 @@ def form_view(request):
         form = StudentForm(initial=initial)
 
     return render(request, "student/reserve.html", {"form": form})
+
+def my_reservations_form(request):
+    """
+    ユーザーが自分の名前を入力するフォームを表示します。
+    GET リクエストでこのページにアクセスするとレンダリングされる想定です。
+    """
+    return render(request, "student/my_reservations_form.html")
+
+
+# ── 〔2/3〕検索結果を表示するビュー ──
+def my_reservations(request):
+    """
+    フォームから送信された student_name を元に、
+    Reservation モデルを検索して結果を表示します。
+    """
+    if request.method != "POST":
+        return redirect("student:my_reservations_form")
+
+    # 入力された名前を取得
+    name = request.POST.get("student_name", "").strip()
+    if not name:
+        return render(request, "student/my_reservations_form.html", {
+            "error": "名前を入力してください。"
+        })
+
+    # Reservation は manager アプリにある想定なので、import 先を manager.models にしている
+    reservations = (
+        Reservation.objects
+        .filter(student_name=name)
+        .order_by("shift_slot__date", "shift_slot__time_slot")
+    )
+
+    return render(request, "student/my_reservations.html", {
+        "reservations": reservations,
+        "searched_name": name,
+    })
+
+
+
+@require_POST
+def cancel_reservation(request, pk):
+    reservation = get_object_or_404(Reservation, pk=pk)
+    name = reservation.student_name
+    reservation.delete()
+
+    # キャンセル後に再度検索結果を表示したい場合:
+    from .models import Reservation as Res
+    results = Res.objects.filter(student_name=name).order_by("slot__date", "slot__time_slot")
+    return render(request, "student/my_reservations.html", {
+        "reservations": results,
+        "searched_name": name,
+    })

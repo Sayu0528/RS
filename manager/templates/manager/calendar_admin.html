@@ -1,7 +1,12 @@
-{% extends 'manager/shift_admin.html' %}
+{% extends 'manager/index.html' %}
 {% block title %}予約カレンダー{% endblock %}
 {% block content %}
   <h2>予約カレンダー</h2>
+<div class="calendar-nav">
+  <a href="?week={{ prev_week }}">＜ 前の週</a>
+  <span>{{ week_dates.0|date:"Y年n月j日" }} ～ {{ week_dates.6|date:"j日" }}</span>
+  <a href="?week={{ next_week }}">次の週 ＞</a>
+</div>
   <table>
     <thead>
       <tr>
