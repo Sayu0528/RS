@@ -22,12 +22,6 @@ urlpatterns = [
     # 管理者サイト
     path('admin/', admin.site.urls),
     path('', include('RS.urls')), 
-    path('manager/', include('manager.urls')), 
-    path(
-        'student/',
-        include(
-            ('student.urls', 'student'),  # (モジュール, app_name) のタプル
-            namespace='student'            # include() に namespace を渡す
-        )
-    ),
+    path('manager/', include('manager.urls')),
+    path('student/', include('student.urls')),
 ]

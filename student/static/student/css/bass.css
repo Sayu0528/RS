@@ -1,0 +1,76 @@
+/* student/static/student/css/base.css */
+
+/* 1. ページ全体の背景・フォント設定 */
+body {
+  background-color: #f8f9fa;    /* Bootstrap の bg-light と馴染む薄グレー */
+  font-family: 'Segoe UI', 'Noto Sans JP', sans-serif;
+  color: #343a40;               /* Bootstrap の text-dark と同じ */
+  line-height: 1.5;
+}
+
+/* 2. ナビバーのカスタマイズ */
+.navbar {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.navbar-brand {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.navbar-nav .nav-link {
+  padding: 0.5rem 1rem;
+}
+.navbar-nav .nav-link.active {
+  font-weight: 600;
+  color: #1abc9c !important;    /* アクセントカラー */
+}
+
+/* 3. メインコンテンツ領域 */
+main.container {
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+}
+
+/* 4. 週ナビゲーション */
+.d-flex.justify-content-center > a.btn {
+  min-width: 80px;
+}
+
+/* 5. カレンダーテーブル */
+.table-responsive {
+  margin-bottom: 1.5rem;
+}
+.table th,
+.table td {
+  vertical-align: middle;       /* 上下中央揃え */
+  padding: 0.75rem;
+}
+.table thead th {
+  background-color: #ffffff;
+  border-bottom: 2px solid #dee2e6;
+}
+.table tbody tr:nth-of-type(odd) {
+  background-color: #ffffff;
+}
+.table tbody tr:nth-of-type(even) {
+  background-color: #f1f3f5;
+}
+.table .btn-outline-success {
+  font-size: 0.85rem;
+  padding: 0.25rem 0.5rem;
+}
+
+/* 6. 「予約済み」「受付不可」表示 */
+.text-muted {
+  opacity: 0.6;
+}
+
+/* 7. レスポンシブ調整 */
+@media (max-width: 768px) {
+  .table-responsive {
+    font-size: 0.9rem;
+  }
+  .d-flex.justify-content-center > a.btn {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}

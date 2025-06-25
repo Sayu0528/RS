@@ -23,7 +23,7 @@
             <td>{{ r.created_at|date:"Y/m/d H:i" }}</td>
             <td>
               {# キャンセルフォーム #}
-              <form method="post" action="{% url 'manager:my_reservation_cancel' r.pk %}"
+              <form method="post" action="{% url 'my_reservation_cancel' r.pk %}"
                     onsubmit="return confirm('本当にキャンセルしますか？');">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-sm btn-danger">キャンセル</button>
@@ -41,7 +41,7 @@
 
   <a href="{% url 'calendar' %}" class="btn btn-secondary ms-2">カレンダーに戻る</a>
     別の名前で検索する
-  <a href="{% url 'manager:calendar' %}" class="btn btn-secondary ms-2">
+  <a href="{% url 'calendar' %}" class="btn btn-secondary ms-2">
     カレンダーに戻る
   </a>
 {% endblock %}

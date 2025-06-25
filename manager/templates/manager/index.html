@@ -2,33 +2,88 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}管理画面{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'manager/css/base.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-…"
+    crossorigin="anonymous"
+  >
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    rel="stylesheet"
+  >
+
+  <!-- Your custom styles (override より後ろに) -->
+  <link rel="stylesheet" href="{% static 'manager/css/base.css' %}">
+  
+  <title>{% block title %}管理画面{% endblock %}</title>
 </head>
 <body>
+  <!-- トップバー -->
+  <header class="topbar">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+      <!-- モバイル用ハンバーガー -->
+      <button
+        class="btn btn-outline-secondary d-md-none"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#sidebarOffcanvas"
+        aria-controls="sidebarOffcanvas"
+      >
+        <i class="fas fa-bars"></i>
+      </button>
 
-    <!-- ヘッダー（トップバー） -->
-    <header class="topbar">
-        <h1><a href="{% url 'index' %}">管理者画面</a></h1>
-    </header>
+      <h1 class="m-0"><a href="{% url 'home' %}">管理者画面</a></h1>
+    </div>
+  </header>
 
-    <!-- サイドバー -->
-    <div class="sidebar">
-        <ul>
-            <li><a href="{% url 'index' %}">ホーム</a></li>
-            <li><a href="{% url 'admin_calendar' %}">シフト設定</a></li>
-            <li><a href="{% url 'shift_schedule' %}">シフト確認</a></li>
-            <li><a href="https://timecard1.smaregi.jp/top">バイトシフト</a></li>
+  <div class="container-fluid">
+    <div class="row">
+
+      <!-- 1) モバイル用 Offcanvas サイドバー -->
+      <nav
+        id="sidebarOffcanvas"
+        class="offcanvas offcanvas-start d-md-none sidebar"
+        tabindex="-1"
+        aria-labelledby="sidebarLabel"
+      >
+        <div class="offcanvas-header">
+          <h5 id="sidebarLabel">メニュー</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+          <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">ホーム</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'calendar_admin_view' %}">シフト設定</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'shift_schedule' %}">シフト確認</a></li>
+            <li class="nav-item"><a class="nav-link" href="https://timecard1.smaregi.jp/top">バイトシフト</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- 2) デスクトップ用 常時表示サイドバー -->
+      <nav class="d-none d-md-block sidebar">
+        <ul class="nav flex-column">
+          <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">ホーム</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'calendar_admin_view' %}">シフト設定</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'shift_schedule' %}">シフト確認</a></li>
+          <li class="nav-item"><a class="nav-link" href="https://timecard1.smaregi.jp/top">バイトシフト</a></li>
         </ul>
-    </div>
+      </nav>
 
-    <!-- メインコンテンツ -->
-    <div class="content">
-        {% block content %}
-        {% endblock %}
-    </div>
+      <!-- メインコンテンツ -->
+      <main class="col pt-5 mt-2 content">
+        {% block content %}{% endblock %}
+      </main>
 
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="…bootstrap.bundle.min.js"></script>
 </body>
 </html>

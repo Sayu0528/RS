@@ -1,8 +1,7 @@
-{# manager/input_by_date_admin.html #}
-{% extends 'manager/shift_admin.html' %}
+{% extends 'manager/index.html' %}
+{% block title %}予約カレンダー{% endblock %}
 {% load lookup %}   {# ← ここで lookup フィルタを読み込む #}
 
-{% block title %}{{ date }} の必要人数設定{% endblock %}
 
 {% block content %}
   <h2>{{ date }} の必要人数設定</h2>

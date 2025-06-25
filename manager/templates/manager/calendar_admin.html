@@ -1,16 +1,18 @@
 {% extends 'manager/index.html' %}
 {% block title %}予約カレンダー{% endblock %}
 {% block content %}
-  <h2>予約カレンダー</h2>
-<div class="calendar-nav">
-  <a href="?week={{ prev_week }}">＜ 前の週</a>
-  <span>{{ week_dates.0|date:"Y年n月j日" }} ～ {{ week_dates.6|date:"j日" }}</span>
-  <a href="?week={{ next_week }}">次の週 ＞</a>
-</div>
-  <table>
-    <thead>
+  <h2 class="my-3">予約カレンダー</h2>
+
+  <div class="calendar-nav d-flex justify-content-between mb-3">
+    <a href="?week={{ prev_week }}" class="btn btn-outline-primary btn-sm">＜ 前の週</a>
+    <span class="align-self-center">{{ week_dates.0|date:"Y年n月j日" }} ～ {{ week_dates.6|date:"j日" }}</span>
+    <a href="?week={{ next_week }}" class="btn btn-outline-primary btn-sm">次の週 ＞</a>
+  </div>
+
+  <table class="table table-bordered table-striped text-center">
+    <thead class="thead-light">
       <tr>
-        <th>時間＼日付</th>
+        <th class="text-center align-middle">時間＼日付</th>
         {% for d in week_dates %}
           <th>{{ d|date:"n/j" }}<br>{{ d|date:"D" }}</th>
         {% endfor %}
@@ -19,10 +21,12 @@
     <tbody>
       {% for slot in time_slots %}
       <tr>
-        <th>{{ slot }}</th>
+        <th class="align-middle">{{ slot }}</th>
         {% for d in week_dates %}
           <td>
-            <a href="{% url 'admin_input_by_date' date=d|date:'Y-m-d' %}">設定</a>
+            {% with d|date:"Y-m-d" as date_str %}
+              <a href="{% url 'admin_input_by_date' date_str %}" class="btn btn-sm btn-outline-success">設定</a>
+            {% endwith %}
           </td>
         {% endfor %}
       </tr>

@@ -2,47 +2,61 @@
 {% load util_tags %}
 
 {% block content %}
-<h2 class="mb-4">今週のシフト表</h2>
+<div class="container-fluid mt-4">
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>時間帯</th>
-      {% for d in week_dates %}
-        <th class="text-center">
-          {{ d|date:"m/d" }}<br>
-          ({{ d|date:"D" }})
-        </th>
-      {% endfor %}
-    </tr>
-  </thead>
+  <h2 class="mb-3 text-center">今週のシフト表</h2>
 
-  <tbody>
-    {% for slot in time_slots %}
-      <tr>
-        <td><strong>{{ slot }}</strong></td>
+  <!-- ここが一行で中央揃え -->
+  <div class="row mb-4">
+    <div class="col text-center">
+      <a href="?week={{ prev_week }}" class="btn btn-success btn-sm mx-2">＜ 前の週</a>
+      <span class="mx-3">
+        {{ week_dates.0|date:"Y年n月j日" }} ～ {{ week_dates|last|date:"n月j日" }}
+      </span>
+      <a href="?week={{ next_week }}" class="btn btn-success btn-sm mx-2">次の週 ＞</a>
+    </div>
+  </div>
 
-        {% for d in week_dates %}
-          {% with cell=matrix|default_if_none:""|get_item:slot|get_item:d %}
-            <td>
-              {% if cell %}
-                <div><small>定員 {{ cell.capacity }} / 残 {{ cell.remaining }}</small></div>
-                <ul class="mb-0 ps-3">
-                  {% for r in cell.reservations.all %}
-                    <li>{{ r.student_name }}</li>
-                  {% empty %}
-                    <li class="text-muted">—</li>
-                  {% endfor %}
-                </ul>
-              {% else %}
-                <span class="text-muted">—</span>
-              {% endif %}
-            </td>
-          {% endwith %}
+  <table class="table table-bordered table-striped text-center">
+    <table class="table table-striped text-center w-100" style="min-width:800px;">
+      <thead class="thead-light">
+        <tr>
+          <th class="text-center align-middle">時間＼日付</th>
+          {% for d in week_dates %}
+            <th>
+              {{ d|date:"m/d" }}<br>
+              ({{ d|date:"D" }})
+            </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for slot in time_slots %}
+          <tr>
+            <td><strong>{{ slot }}</strong></td>
+            {% for d in week_dates %}
+              {% with cell=matrix|get_item:slot|get_item:d %}
+                <td>
+                  {% if cell %}
+                    <div><small>定員 {{ cell.capacity }} / 残 {{ cell.remaining }}</small></div>
+                    <ul class="mb-0 ps-3">
+                      {% for r in cell.reservations.all %}
+                        <li>{{ r.student_name }}</li>
+                      {% empty %}
+                        <li class="text-muted">—</li>
+                      {% endfor %}
+                    </ul>
+                  {% else %}
+                    <span class="text-muted">—</span>
+                  {% endif %}
+                </td>
+              {% endwith %}
+            {% endfor %}
+          </tr>
         {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+</div>
 {% endblock %}

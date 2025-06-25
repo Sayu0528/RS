@@ -130,3 +130,6 @@ def cancel_reservation(request, pk):
         "reservations": results,
         "searched_name": name,
     })
+
+def base(request):
+    return render(request, 'student/calendar_base.html')

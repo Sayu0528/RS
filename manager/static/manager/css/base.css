@@ -1,54 +1,75 @@
-/* --- base.css for Manager App --- */
+/* --- base.css for Manager App (Topbar White Version) --- */
 
-/* 1. CSS Variables: centralized palette & sizing */
+/* 1. Variables: Colors, dimensions, typography */
 :root {
-  --primary-bg: #2c3e50;              /* dark blue‑gray used for topbar/sidebar */
-  --primary-bg-light: #34495e;        /* slightly lighter shade for hover */
-  --accent: #1abc9c;                  /* teal accent for buttons/links */
-  --text-light: #ffffff;              /* white text */
-  --text-dark: #2c3e50;               /* default dark text */
-  --header-height: 60px;              /* consistent topbar height */
-  --sidebar-width: 220px;             /* default sidebar width */
-  --radius: 6px;                      /* standard border‑radius */
+  /* Colors */
+  --color-primary-light: #34495e;
+  --color-accent: #1abc9c;
+  --color-bg: #bbbbbb;
+  --color-text-dark: #2c3e50;
+  --color-text-light: #ffffff;
+  --color-border: #e1e4e8;
+
+  /* Sizing */
+  --header-height: 60px;
+  --sidebar-width: 220px;
+  --border-radius: 6px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+
+  /* Typography */
+  --font-family: 'Segoe UI', 'Noto Sans JP', sans-serif;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-weight-bold: 600;
 }
 
-/* 2. CSS Reset / global defaults */
-*,
-*::before,
-*::after {
+/* 2. Reset and base */
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-
-html,
-body {
+html, body {
   height: 100%;
-  font-family: 'Segoe UI', 'Noto Sans JP', sans-serif;
-  background-color: #f5f7fa;
-  color: var(--text-dark);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  background-color: var(--color-bg);
+  color: var(--color-text-dark);
+}
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
 }
 
-/* 3. Layout: topbar + sidebar + main content */
+/* 3. Layout: Topbar, Sidebar, Content */
 .topbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: var(--header-height);
-  background-color: var(--primary-bg);
-  color: var(--text-light);
+  background-color: #ffffff;                      /* 白背景 */
+  color: var(--color-text-dark);                  /* テキストはダーク */
   display: flex;
   align-items: center;
-  padding: 0 24px;
-  font-size: 1.25rem;
-  font-weight: 600;
+  padding: 0 var(--spacing-lg);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);       /* 軽い影 */
+  border-bottom: 1px solid var(--color-border);   /* 境界線 */
   z-index: 1000;
 }
-
 .topbar a {
-  color: var(--text-light);
+  color: var(--color-text-dark);
   text-decoration: none;
+}
+.topbar a:hover {
+  text-decoration: underline;
 }
 
 .sidebar {
@@ -57,83 +78,105 @@ body {
   left: 0;
   width: var(--sidebar-width);
   height: calc(100% - var(--header-height));
-  background-color: var(--primary-bg);
-  padding: 24px 0;
+  background-color: #2d69d8;
+  padding-top: var(--spacing-lg);
   overflow-y: auto;
 }
-
+.sidebar ul {
+  list-style: none;
+}
+.sidebar li + li {
+  margin-top: var(--spacing-sm);
+}
 .sidebar a {
   display: block;
-  color: var(--text-light);
-  padding: 12px 24px;
-  text-decoration: none;
-  transition: background-color 0.2s ease;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  color: var(--color-text-light);
+  transition: background-color 0.2s;
 }
-
 .sidebar a:hover,
 .sidebar a.active {
-  background-color: var(--primary-bg-light);
+  background-color: var(--color-primary-light);
 }
 
 .content {
   margin-top: var(--header-height);
   margin-left: var(--sidebar-width);
-  padding: 24px;
+  padding: var(--spacing-lg);
   min-height: calc(100% - var(--header-height));
 }
 
-/* 4. Utilities */
+/* 4. Utility classes */
 .btn {
   display: inline-block;
-  padding: 8px 16px;
-  border-radius: var(--radius);
+  padding: var(--spacing-sm) var(--spacing-md);
   border: none;
-  background-color: var(--accent);
-  color: var(--text-light);
+  border-radius: var(--border-radius);
+  background-color: var(--color-accent);
+  color: var(--color-text-light);
+  font-size: var(--font-size-base);
   cursor: pointer;
-  transition: filter 0.2s ease;
+  transition: background-color 0.2s, filter 0.2s;
 }
-
 .btn:hover {
   filter: brightness(1.1);
 }
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 1.5rem;
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+}
+.btn-outline:hover {
+  background-color: var(--color-accent);
+  color: var(--color-text-light);
 }
 
+/* 5. Table styling */
+.table {
+  width: 100% !important;
+  max-width: none;
+  border-collapse: collapse;
+  margin-bottom: var(--spacing-lg);
+}
 .table th,
 .table td {
-  padding: 0.75rem;
-  border-bottom: 1px solid #e1e4e8;
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+  text-align: center;
 }
-
 .table th {
-  background-color: #ecf0f1;
-  text-align: left;
+  background-color: var(--color-bg);
+  font-weight: var(--font-weight-bold);
 }
 
-input,
+/* 6. Form elements */
+input[type="text"],
+input[type="number"],
 select,
 textarea {
   width: 100%;
-  padding: 8px 12px;
+  padding: var(--spacing-sm) var(--spacing-md);
   border: 1px solid #ced4da;
-  border-radius: var(--radius);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-base);
+  margin-top: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
 }
 
-/* 5. Responsive tweaks */
+/* 7. Responsive adjustments */
 @media (max-width: 768px) {
   :root {
     --sidebar-width: 180px;
   }
+  .topbar {
+    font-size: var(--font-size-base);
+    padding: 0 var(--spacing-md);
+  }
   .content {
     margin-left: var(--sidebar-width);
-    padding: 16px;
+    padding: var(--spacing-md);
   }
-  .topbar {
-    font-size: 1rem;
+  .sidebar a {
+    padding: var(--spacing-sm) var(--spacing-md);
   }
 }

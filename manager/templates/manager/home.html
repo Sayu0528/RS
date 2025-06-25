@@ -1,0 +1,29 @@
+{% extends 'manager/index.html' %}
+{% block title %}ホーム{% endblock %}
+
+{% block content %}
+  <h2 class="section-title">お知らせ・リリース情報</h2>
+  <ul class="release-list">
+    {% for r in releases %}
+    <li>
+      <span class="release-date">{{ r.date }}</span>
+      <a href="{{ r.url }}" class="release-title">{{ r.title }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+
+  <h2 class="section-title mt-4">ご利用中のサービス</h2>
+  <div class="service-grid">
+    {% for svc in services %}
+    <div class="service-card {% if not svc.active %}inactive{% endif %}">
+      
+      <div class="service-name">{{ svc.name }}</div>
+      {% if svc.active %}
+        <a href="{{ svc.setting_url }}" class="btn btn-sm btn-outline-primary mt-2">設定方法</a>
+      {% else %}
+        <div class="text-muted small mt-2">ご利用されていません</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+{% endblock %}
