@@ -1,14 +1,22 @@
+{# student/templates/student/my_reservations_form.html #}
 {% extends "student/calendar_base.html" %}
-
 {% block content %}
-  <h2 class="mb-4">予約確認</h2>
-
+  <h2 class="mb-4">予約確認フォーム</h2>
   {% if error %}
     <div class="alert alert-danger">{{ error }}</div>
   {% endif %}
-
   <form method="post" action="{% url 'my_reservations' %}">
     {% csrf_token %}
+    <div class="mb-3">
+      <label for="student_id" class="form-label">学籍番号</label>
+      <input type="text"
+             id="student_id"
+             name="student_id"
+             class="form-control"
+             placeholder="例：20201234"
+             maxlength="8"
+             >
+    </div>
     <div class="mb-3">
       <label for="student_name" class="form-label">お名前</label>
       <input type="text"
@@ -16,9 +24,9 @@
              name="student_name"
              class="form-control"
              placeholder="例：山田 太郎"
-             required>
+             >
     </div>
-    <button type="submit" class="btn btn-primary">予約を確認する</button>
-    <a href="{% url 'calendar' %}" class="btn btn-secondary ms-2">カレンダーに戻る</a>
+    <button type="submit" class="btn btn-primary me-2">検索</button>
+    <a href="{% url 'calendar' %}" class="btn btn-secondary">カレンダーに戻る</a>
   </form>
 {% endblock %}

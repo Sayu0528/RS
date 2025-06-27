@@ -1,5 +1,5 @@
 {% extends 'student/calendar_base.html' %}
-{% load lookup %}  {# カスタムフィルターをロード #}
+{% load lookup tz %}
 
 {% block title %}予約カレンダー{% endblock %}
 
@@ -12,12 +12,15 @@
   <a href="?week={{ next_week }}">次の週 ＞</a>
 </div>
 
-<table>
+<table class="table table-bordered text-center">
   <thead>
     <tr>
       <th>時間帯＼日付</th>
       {% for d in week_dates %}
-        <th>{{ d|date:"j" }}<br>{{ d|date:"D" }}</th>
+        <th>
+          {{ d|date:"j" }}<br>
+          {{ d|date:"D" }}
+        </th>
       {% endfor %}
     </tr>
   </thead>
@@ -27,11 +30,11 @@
       <tr>
         <th>{{ slot }}</th>
         {% for d in week_dates %}
-          {# key を「YYYY-MM-DD@時間帯」という文字列にしておく #}
           {% with key=d|date:"Y-m-d"|add:"@"|add:slot %}
             {% with slot_obj=slot_map|lookup:key %}
               <td>
-                {% if slot_obj %}
+                {# 今日以降かつ予約可能なスロットのみリンクを表示 #}
+                {% if slot_obj and d >= today %}
                   <a href="{% url 'form' %}?slot={{ slot_obj.id }}">〇</a>
                 {% endif %}
               </td>

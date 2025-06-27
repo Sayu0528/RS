@@ -5,7 +5,7 @@
   /* Colors */
   --color-primary-light: #34495e;
   --color-accent: #1abc9c;
-  --color-bg: #bbbbbb;
+  --color-bg: #f5f2f2;
   --color-text-dark: #2c3e50;
   --color-text-light: #ffffff;
   --color-border: #e1e4e8;
@@ -21,7 +21,7 @@
   /* Typography */
   --font-family: 'Segoe UI', 'Noto Sans JP', sans-serif;
   --font-size-base: 1rem;
-  --font-size-lg: 1.25rem;
+  --font-size-lg: 0.8rem;
   --font-weight-bold: 600;
 }
 
@@ -57,7 +57,10 @@ a:hover {
   color: var(--color-text-dark);                  /* テキストはダーク */
   display: flex;
   align-items: center;
-  padding: 0 var(--spacing-lg);
+  padding-top:    0;
+  padding-right:  var(--spacing-lg);
+  padding-bottom: 0;
+  padding-left:   220px;
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);       /* 軽い影 */
@@ -74,13 +77,14 @@ a:hover {
 
 .sidebar {
   position: fixed;
-  top: var(--header-height);
+  top: 0;
   left: 0;
   width: var(--sidebar-width);
-  height: calc(100% - var(--header-height));
-  background-color: #2d69d8;
-  padding-top: var(--spacing-lg);
+  height: 100%;
+  background-color: #34495e;
+  padding-top: 15px;
   overflow-y: auto;
+  z-index: 1100;
 }
 .sidebar ul {
   list-style: none;
@@ -99,6 +103,17 @@ a:hover {
   background-color: var(--color-primary-light);
 }
 
+.sidebar .p-3 h1 {
+  /* フォントサイズを少し小さく */
+  font-size: 1.8rem; /* デフォルトの .h5 は約1.25rem */
+  /* 上下左右のパディング調整 */
+  margin: 0;            /* 見出しの上下マージンをリセット */
+  padding-top: 0;   /* 上下だけちょっと余白を入れる */
+  padding-bottom: 15px;
+  /* 必要なら文字色や行間も調整 */
+  line-height: 0;
+  color: #ffffff;
+}
 .content {
   margin-top: var(--header-height);
   margin-left: var(--sidebar-width);
@@ -179,4 +194,13 @@ textarea {
   .sidebar a {
     padding: var(--spacing-sm) var(--spacing-md);
   }
+}
+
+.table tbody tr:nth-of-type(odd) {
+  background-color: #f7f7f7;
+}
+.table th,
+.table td {
+  vertical-align: middle;
+  padding: 0.75rem 1rem;
 }

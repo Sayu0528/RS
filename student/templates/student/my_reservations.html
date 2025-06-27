@@ -1,7 +1,10 @@
+{# student/templates/student/my_reservations.html #}
 {% extends "student/calendar_base.html" %}
-
 {% block content %}
-  <h2 class="mb-4">「{{ searched_name }}」さんの予約一覧</h2>
+  <h2 class="mb-4">
+    {% if searched_id %}学籍番号：{{ searched_id }}{% endif %}
+    {% if searched_name %} 「{{ searched_name }}」さんの予約一覧{% endif %}
+  </h2>
 
   {% if reservations %}
     <table class="table table-bordered">
@@ -11,7 +14,7 @@
           <th>時間帯</th>
           <th>残枠</th>
           <th>作成日時</th>
-          <th>操作</th>  {# ここを追加 #}
+          <th>操作</th>
         </tr>
       </thead>
       <tbody>
@@ -22,9 +25,11 @@
             <td>{{ r.shift_slot.remaining }} / {{ r.shift_slot.capacity }}</td>
             <td>{{ r.created_at|date:"Y/m/d H:i" }}</td>
             <td>
-              {# キャンセルフォーム #}
-              <form method="post" action="{% url 'my_reservation_cancel' r.pk %}"
-                    onsubmit="return confirm('本当にキャンセルしますか？');">
+              <form 
+                method="post"
+                action="{% url 'my_reservation_cancel' r.pk %}"
+                onsubmit="return confirm('本当にキャンセルしますか？');"
+              >
                 {% csrf_token %}
                 <button type="submit" class="btn btn-sm btn-danger">キャンセル</button>
               </form>
@@ -35,13 +40,14 @@
     </table>
   {% else %}
     <div class="alert alert-info">
-      ‟{{ searched_name }}” さんの予約は見つかりませんでした。
+      予約が見つかりませんでした。
     </div>
   {% endif %}
 
-  <a href="{% url 'calendar' %}" class="btn btn-secondary ms-2">カレンダーに戻る</a>
-    別の名前で検索する
-  <a href="{% url 'calendar' %}" class="btn btn-secondary ms-2">
+  <a href="{% url 'my_reservations_form' %}" class="btn btn-secondary mt-3">
+    別の条件で検索する
+  </a>
+  <a href="{% url 'calendar' %}" class="btn btn-secondary mt-3 ms-2">
     カレンダーに戻る
   </a>
 {% endblock %}

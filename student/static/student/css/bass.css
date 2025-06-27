@@ -74,3 +74,28 @@ main.container {
     padding: 0.25rem 0.5rem;
   }
 }
+
+btn-cute {
+  border-radius: 2rem;
+  padding: 0.6rem 1.5rem;
+  transition: all 0.2s ease;
+}
+
+.btn-cute:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+/* プライマリーボタン用グラデーション */
+.btn-cute-primary {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+  color: #fff;
+  border: none;
+}
+
+/* セカンダリーボタン用薄ピンク枠 */
+.btn-cute-secondary {
+  background: transparent;
+  color: #fa9fb5;
+  border: 2px solid #fa9fb5;
+}

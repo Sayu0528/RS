@@ -1,12 +1,16 @@
+{# manager/templates/manager/shift_schedule.html #}
 {% extends "manager/index.html" %}
 {% load util_tags %}
+
+{% block page_title %}シフト確認{% endblock %}
 
 {% block content %}
 <div class="container-fluid mt-4">
 
-  <h2 class="mb-3 text-center">今週のシフト表</h2>
+  <!-- 見出し -->
+  <h2 class="mb-3">今週のシフト表</h2>
 
-  <!-- ここが一行で中央揃え -->
+  <!-- ナビゲーション -->
   <div class="row mb-4">
     <div class="col text-center">
       <a href="?week={{ prev_week }}" class="btn btn-success btn-sm mx-2">＜ 前の週</a>
@@ -17,15 +21,16 @@
     </div>
   </div>
 
-  <table class="table table-bordered table-striped text-center">
-    <table class="table table-striped text-center w-100" style="min-width:800px;">
+  <!-- カレンダー本体 -->
+  <div class="table-responsive shadow-sm bg-white rounded">
+    <table class="table table-bordered table-striped text-center mb-0">
       <thead class="thead-light">
         <tr>
-          <th class="text-center align-middle">時間＼日付</th>
+          <th scope="col" class="align-middle">時間＼日付</th>
           {% for d in week_dates %}
-            <th>
-              {{ d|date:"m/d" }}<br>
-              ({{ d|date:"D" }})
+            <th scope="col">
+              {{ d|date:"n/j" }}<br>
+              <small>{{ d|date:"D" }}</small>
             </th>
           {% endfor %}
         </tr>
@@ -33,23 +38,25 @@
       <tbody>
         {% for slot in time_slots %}
           <tr>
-            <td><strong>{{ slot }}</strong></td>
+            <th scope="row" class="align-middle">{{ slot }}</th>
             {% for d in week_dates %}
               {% with cell=matrix|get_item:slot|get_item:d %}
-                <td>
-                  {% if cell %}
-                    <div><small>定員 {{ cell.capacity }} / 残 {{ cell.remaining }}</small></div>
-                    <ul class="mb-0 ps-3">
-                      {% for r in cell.reservations.all %}
-                        <li>{{ r.student_name }}</li>
-                      {% empty %}
-                        <li class="text-muted">—</li>
-                      {% endfor %}
-                    </ul>
-                  {% else %}
-                    <span class="text-muted">—</span>
-                  {% endif %}
-                </td>
+              <td class="align-middle">
+                {% if cell %}
+                  <div>
+                    <small>定員 {{ cell.capacity }} / 残 {{ cell.remaining }}</small>
+                  </div>
+                  <ul class="mb-0 ps-3 text-start">
+                    {% for r in cell.reservations.all %}
+                      <li>{{ r.student_name }}</li>
+                    {% empty %}
+                      <li class="text-muted">—</li>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  <span class="text-muted">—</span>
+                {% endif %}
+              </td>
               {% endwith %}
             {% endfor %}
           </tr>

@@ -24,22 +24,30 @@ def trans_comp(request):
     return render(request, 'student/trans_comp.html')
 
 def calendar_view(request):
+    # 今日の日付を常に取得しておく
+    today = date.today()
+
     # 「week=YYYY-MM-DD」の GET パラメータがあればその週の月曜を start に
     week_str = request.GET.get("week")
     if week_str:
+        # パラメータ指定時も today は変えずに使う
         start = date.fromisoformat(week_str)
     else:
-        today = date.today()
+        # 今週の月曜
         start = today - timedelta(days=today.weekday())
+
+    # 週の日付リスト
     week_dates = [start + timedelta(days=i) for i in range(7)]
     prev_week = (start - timedelta(days=7)).isoformat()
     next_week = (start + timedelta(days=7)).isoformat()
 
-    # その週の「空きがある」ShiftSlot を取得
+    # その週の「空きがある」＆「今日以降」の ShiftSlot を取得
     slots = ShiftSlot.objects.filter(
         date__range=(week_dates[0], week_dates[-1]),
-        is_available=True
+        is_available=True,
+        date__gte=today,
     )
+
     # キーを "YYYY-MM-DD@時間帯" の文字列にして辞書化
     slot_map = {
         f"{s.date.isoformat()}@{s.time_slot}": s
@@ -47,6 +55,7 @@ def calendar_view(request):
     }
 
     return render(request, "student/calendar.html", {
+        "today": today,
         "week_dates": week_dates,
         "time_slots": TIME_SLOTS,
         "slot_map": slot_map,
@@ -89,30 +98,28 @@ def my_reservations_form(request):
 
 # ── 〔2/3〕検索結果を表示するビュー ──
 def my_reservations(request):
-    """
-    フォームから送信された student_name を元に、
-    Reservation モデルを検索して結果を表示します。
-    """
-    if request.method != "POST":
-        return redirect("student:my_reservations_form")
+    searched_id = request.POST.get("student_id", "").strip()
+    searched_name = request.POST.get("student_name", "").strip()
 
-    # 入力された名前を取得
-    name = request.POST.get("student_name", "").strip()
-    if not name:
+    # 何も入力がなければフォーム再表示＋エラー
+    if request.method == "POST" and not (searched_id or searched_name):
         return render(request, "student/my_reservations_form.html", {
-            "error": "名前を入力してください。"
+            "error": "学籍番号かお名前のいずれかを入力してください。",
         })
 
-    # Reservation は manager アプリにある想定なので、import 先を manager.models にしている
-    reservations = (
-        Reservation.objects
-        .filter(student_name=name)
-        .order_by("shift_slot__date", "shift_slot__time_slot")
-    )
+    reservations = []
+    if request.method == "POST":
+        qs = Reservation.objects.select_related("shift_slot")
+        if searched_id:
+            qs = qs.filter(student_id=searched_id)
+        if searched_name:
+            qs = qs.filter(student_name__icontains=searched_name)
+        reservations = qs.order_by("-created_at")
 
     return render(request, "student/my_reservations.html", {
+        "searched_id": searched_id,
+        "searched_name": searched_name,
         "reservations": reservations,
-        "searched_name": name,
     })
 
 
@@ -133,3 +140,14 @@ def cancel_reservation(request, pk):
 
 def base(request):
     return render(request, 'student/calendar_base.html')
+
+
+def my_reservation_cancel(request, pk):
+    # student_id フィールドにユーザーの PK を保存しているなら…
+    reservation = get_object_or_404(
+        Reservation,
+        pk=pk,)
+        
+    if request.method == "POST":
+        reservation.delete()
+    return redirect("my_reservations_form")
